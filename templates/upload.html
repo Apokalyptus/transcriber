@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio hochladen</title>
+</head>
+<body>
+  <h1>Audio hochladen</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" required><br><br>
+    <textarea name="prompt_addon" placeholder="Zusätzlicher Prompt..." rows="4" cols="60"></textarea><br><br>
+    <button type="submit">Hochladen</button>
+  </form>
+  <div id="response"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const res = await fetch('/upload', {
+        method: 'POST',
+        body: data
+      });
+      const result = await res.json();
+      document.getElementById('response').innerHTML =
+        `<p>${result.message}</p><p>Zum Ergebnis: <a href="${result.check_url}" target="_blank">${result.check_url}</a></p>`;
+    });
+  </script>
+</body>
+</html>
