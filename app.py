@@ -83,7 +83,7 @@ if st.button("Verarbeiten") and uploaded_file:
     task_id = str(uuid.uuid4())
     input_path = os.path.join(UPLOAD_FOLDER, f"{task_id}_{uploaded_file.name}")
     wav_path = input_path.rsplit('.', 1)[0] + ".wav"
-    txt_path = os.path.join(OUTPUT_FOLDER, f"{task_id}_transcript.txt")
+    txt_path = os.path.join(OUTPUT_FOLDER, f"{task_id}_transcript")
 
     with open(input_path, "wb") as f:
         f.write(uploaded_file.read())
@@ -92,7 +92,7 @@ if st.button("Verarbeiten") and uploaded_file:
         convert_to_wav(input_path, wav_path)
         transcribe(wav_path, txt_path)
 
-    with open(txt_path, "r", encoding="utf-8") as f:
+    with open(f"{txt_path}.txt", "r", encoding="utf-8") as f:
         transcript = f.read()
 
     transcript = sanitize_transcript(transcript)
