@@ -23,8 +23,8 @@ COPY . .
 
 # Venv erstellen mit uv und Abhängigkeiten installieren
 RUN uv venv .venv && \
-    .venv/bin/uv pip install --upgrade pip && \
-    .venv/bin/uv pip install -r requirements.txt
+    uv pip install --upgrade pip && \
+    uv pip install -r requirements.txt
 
 # whisper.cpp kompilieren
 RUN git clone https://github.com/ggerganov/whisper.cpp.git \
