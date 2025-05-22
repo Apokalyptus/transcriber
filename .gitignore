@@ -1,12 +1,1 @@
-.venv/
-__pycache__/
-logs/
-uploads/
-outputs/
-lib/
-lib64/
-bin/
-models/
-whisper-cli
-.env
-
+*

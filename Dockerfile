@@ -12,8 +12,8 @@ RUN pacman -Syu --noconfirm && \
         python \
         python-setuptools \
         opencl-headers \
-        rocm-opencl-runtime \
         vulkan-devel \
+	amdvlk \
         clinfo \
         uv \
         curl \
@@ -38,9 +38,11 @@ RUN uv pip install -r requirements.txt
 # whisper.cpp kompilieren
 RUN git clone https://github.com/ggerganov/whisper.cpp.git 
 RUN cd whisper.cpp && \
-    cmake -B build -DGGML_VULKAN=1 -DWHISPER_FFMPEG=yes && \
+    cmake -B build -DGGML_VULKAN=1 -DWHISPER_FFMPEG=yes -DBUILD_SHARED_LIBS=0 && \
     cmake --build build -j --config Release && \
     cp build/bin/whisper-cli /app/whisper-cli
+
+RUN rm -rf whisper.cpp
 
 # Port freigeben
 EXPOSE 5000

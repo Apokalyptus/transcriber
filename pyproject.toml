@@ -7,10 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "requests>=2.32.3",
     "flask",
-    "openai",
-    "python-dotenv"
+    "openai==1.81.0",
+    "python-dotenv",
 ]
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
