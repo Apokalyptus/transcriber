@@ -79,7 +79,7 @@ def convert_to_wav(input_path, output_path):
 def transcribe(wav_path, output_txt_path):
     subprocess.run([
         WHISPER_EXECUTABLE,
-        'nt',
+        '-nt',
         '-l', 'auto',
         '-m', WHISPER_MODEL,
         '-f', wav_path,
