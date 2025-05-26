@@ -96,7 +96,7 @@ if st.button("Verarbeiten") and uploaded_file:
     task_id = str(uuid.uuid4())
     input_path = os.path.join(UPLOAD_FOLDER, f"{task_id}_{uploaded_file.name}")
     wav_path = input_path.rsplit('.', 1)[0] + ".wav"
-    txt_path = os.path.join(OUTPUT_FOLDER, f"{task_id}_transcript.txt")
+    txt_base = os.path.join(OUTPUT_FOLDER, f"{task_id}_transcript")  # ohne .txt
 
     with open(input_path, "wb") as f:
         f.write(uploaded_file.read())
@@ -108,10 +108,10 @@ if st.button("Verarbeiten") and uploaded_file:
         convert_to_wav(input_path, wav_path)
 
         progress.progress(40, "📝 Transkribiere mit Whisper...")
-        transcribe(wav_path, txt_path)
+        transcribe(wav_path, txt_base)  # ohne .txt
 
         progress.progress(60, "📄 Lade Transkript...")
-        with open(txt_path, "r", encoding="utf-8") as f:
+        with open(f"{txt_base}.txt", "r", encoding="utf-8") as f:
             transcript = f.read()
 
         transcript = sanitize_transcript(transcript)
@@ -130,28 +130,3 @@ if st.button("Verarbeiten") and uploaded_file:
     except Exception as e:
         progress.empty()
         st.error(f"❌ Fehler bei der Verarbeitung: {e}")
-    task_id = str(uuid.uuid4())
-    input_path = os.path.join(UPLOAD_FOLDER, f"{task_id}_{uploaded_file.name}")
-    wav_path = input_path.rsplit('.', 1)[0] + ".wav"
-    txt_path = os.path.join(OUTPUT_FOLDER, f"{task_id}_transcript")
-
-    with open(input_path, "wb") as f:
-        f.write(uploaded_file.read())
-
-    with st.spinner("Konvertiere und transkribiere..."):
-        convert_to_wav(input_path, wav_path)
-        transcribe(wav_path, txt_path)
-
-    with open(f"{txt_path}.txt", "r", encoding="utf-8") as f:
-        transcript = f.read()
-
-    transcript = sanitize_transcript(transcript)
-
-    with st.spinner("Sende an Ollama..."):
-        summary = ollama_summarize(transcript, prompt_addon)
-
-    st.subheader("📝 Zusammenfassung")
-    st.write(summary)
-
-    st.subheader("📄 Transkript")
-    st.text_area("Transkript", transcript, height=300)
