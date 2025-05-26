@@ -9,5 +9,7 @@ dependencies = [
     "flask",
     "openai==1.81.0",
     "python-dotenv",
+    "streamlit>=1.45.1",
+    "dotenv>=0.9.9",
 ]
 
