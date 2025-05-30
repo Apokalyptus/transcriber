@@ -30,22 +30,24 @@ WORKDIR /app
 COPY . .
 
 # Venv erstellen mit uv und Abhängigkeiten installieren
-RUN uv venv --python 3.11 --allow-existing --relocatable /app
-RUN uv pip install --upgrade pip
-RUN uv pip install -r requirements.txt
+#RUN uv venv --python 3.11 --allow-existing --relocatable /app
+RUN uv pip install -r requirements.txt --system --break-system-packages
 
 
 # whisper.cpp kompilieren
-RUN git clone https://github.com/ggerganov/whisper.cpp.git 
-RUN cd whisper.cpp && \
-    cmake -B build -DGGML_VULKAN=1 -DWHISPER_FFMPEG=yes -DBUILD_SHARED_LIBS=0 && \
-    cmake --build build -j --config Release && \
-    cp build/bin/whisper-cli /app/whisper-cli
+#RUN git clone https://github.com/ggerganov/whisper.cpp.git 
+#RUN cd whisper.cpp && \
+#    cmake -B build -DGGML_VULKAN=1 -DWHISPER_FFMPEG=yes -DBUILD_SHARED_LIBS=0 && \
+#    cmake --build build -j --config Release && \
+#    cp build/bin/whisper-cli /app/whisper-cli
 
-RUN rm -rf whisper.cpp
+#RUN rm -rf whisper.cpp
+
+#COPY ../whisper.cpp/build/bin/whisper-cli whisper-cli
+ 
 
 # Port freigeben
 EXPOSE 5000
 
 # Anwendung starten über uv-venv
-CMD ["/bin/bash", "-c", ". .venv/bin/activate && streamlit run app.py"]
+CMD ["/usr/bin/streamlit",  "run",  "app.py"]
